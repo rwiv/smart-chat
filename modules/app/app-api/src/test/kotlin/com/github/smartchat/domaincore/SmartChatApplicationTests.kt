@@ -1,4 +1,4 @@
-package com.github.smartchat
+package com.github.smartchat.domaincore
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
