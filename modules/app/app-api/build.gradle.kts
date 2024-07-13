@@ -6,10 +6,12 @@ tasks.getByName("jar") {
     enabled = false
 }
 
+val commonUtils: String by project
 val domainCore: String by project
 val infraCore: String by project
 
 dependencies {
+    implementation(project(commonUtils))
     implementation(project(domainCore))
     implementation(project(infraCore))
 
