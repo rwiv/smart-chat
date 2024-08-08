@@ -1,0 +1,8 @@
+services:
+  smart-chat:
+    image: smart-chat:latest
+    container_name: smart-chat
+    environment:
+      spring.profiles.active: dev
+    ports:
+      - "8080:8080"
