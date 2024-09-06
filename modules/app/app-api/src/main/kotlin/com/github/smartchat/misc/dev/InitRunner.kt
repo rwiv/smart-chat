@@ -3,7 +3,6 @@ package com.github.smartchat.misc.dev
 import com.github.smartchat.domaincore.domain.account.AccountAdd
 import com.github.smartchat.domaincore.domain.account.AccountRole
 import com.github.smartchat.domaincore.domain.account.AccountService
-import com.github.smartchat.domaincore.domain.chatroom.ChatRoomRepository
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomAdd
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomService
 import com.github.smartchat.domaincore.domain.chatuser.ChatUserService
@@ -31,8 +30,5 @@ class InitRunner(
             createdById = ac1.id,
             isPrivate = false,
         ))
-
-        println(ac1)
-        println(cr1)
     }
 }
