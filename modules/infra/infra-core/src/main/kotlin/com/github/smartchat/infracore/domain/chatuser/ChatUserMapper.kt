@@ -1,6 +1,5 @@
 package com.github.smartchat.infracore.domain.chatuser
 
-import com.github.smartchat.domaincore.domain.chatroom.ChatRoomQuery
 import com.github.smartchat.domaincore.domain.chatuser.ChatUser
 import com.github.smartchat.domaincore.domain.chatuser.ChatUserAdd
 import com.github.smartchat.domaincore.domain.chatuser.ChatUserQuery
