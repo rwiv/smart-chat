@@ -1,6 +1,5 @@
 package com.github.smartchat.common.webrtc
 
-import com.github.smartchat.common.webrtc.DescriptionMessage
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
