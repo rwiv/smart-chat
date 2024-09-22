@@ -6,6 +6,12 @@ tasks.getByName("jar") {
     enabled = false
 }
 
+dependencyManagement {
+    imports {
+        mavenBom("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release")
+    }
+}
+
 val commonUtils: String by project
 val domainCore: String by project
 val infraCore: String by project
@@ -17,4 +23,9 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter")
+    implementation("com.graphql-java:graphql-java-extended-scalars:21.0")
 }

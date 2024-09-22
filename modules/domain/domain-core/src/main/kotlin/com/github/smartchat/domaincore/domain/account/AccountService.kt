@@ -1,6 +1,7 @@
 package com.github.smartchat.domaincore.domain.account
 
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class AccountService(
@@ -12,5 +13,13 @@ class AccountService(
 
     fun findAll() : List<Account> {
         return accountRepository.findAll()
+    }
+
+    fun findById(id: UUID): Account? {
+        return accountRepository.findById(id)
+    }
+
+    fun findByUsername(username: String): Account? {
+        return accountRepository.findByUsername(username)
     }
 }
