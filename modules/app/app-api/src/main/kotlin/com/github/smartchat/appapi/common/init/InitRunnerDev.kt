@@ -8,6 +8,7 @@ import com.github.smartchat.domaincore.domain.chatroom.ChatRoomService
 import com.github.smartchat.domaincore.domain.chatuser.ChatUserService
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 
 @Component
@@ -15,13 +16,14 @@ class InitRunnerDev(
     private val accountService: AccountService,
     private val chatRoomService: ChatRoomService,
     private val chatUserService: ChatUserService,
+    private val passwordEncoder: PasswordEncoder,
 ) : ApplicationRunner {
 
     override fun run(args: ApplicationArguments?) {
         val ac1 = accountService.create(AccountAdd(
             role = AccountRole.MEMBER,
             username = "user1@gmail.com",
-            password = "1234",
+            password = passwordEncoder.encode("1234"),
             nickname = "user1",
         ))
 

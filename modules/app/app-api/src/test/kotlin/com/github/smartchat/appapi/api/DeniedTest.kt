@@ -17,7 +17,7 @@ class DeniedTest {
         val loginForm = LoginRequest("user1@gmail.com", "1234")
 
         val postRequest = RequestEntity
-            .post("http://localhost:11730/user/login")
+            .post("http://localhost:8080/user/login")
             .contentType(MediaType.APPLICATION_JSON)
             .body(loginForm)
 
@@ -27,7 +27,7 @@ class DeniedTest {
         val jSessionId = TestHelper().getJSessionId(postResponseEntity.headers)
 
         val getRequest = RequestEntity
-            .get("http://localhost:11730/test/admin")
+            .get("http://localhost:8080/test/admin")
             .header("Cookie", "JSESSIONID=$jSessionId")
             .build()
 

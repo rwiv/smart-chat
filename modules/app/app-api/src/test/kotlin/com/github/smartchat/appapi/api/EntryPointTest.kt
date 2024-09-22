@@ -11,7 +11,7 @@ class EntryPointTest {
     @Test
     fun 세션키_없이_요청() {
         val getRequest = RequestEntity
-            .get("http://localhost:11730/test/hello")
+            .get("http://localhost:8080/test/hello")
             .build()
 
         val getResponseEntity = restTemplate.exchange(getRequest, String::class.java)

@@ -1,6 +1,5 @@
 package com.github.smartchat.appapi.api
 
-import com.github.smartchat.domaincore.domain.account.AccountPublic
 import com.github.smartchat.appapi.helpers.TestHelper
 import com.github.smartchat.appapi.security.filters.LoginRequest
 import org.junit.jupiter.api.Test
@@ -17,17 +16,17 @@ class LoginTest {
         val loginForm = LoginRequest("user1@gmail.com", "1234")
 
         val postRequest = RequestEntity
-            .post("http://localhost:11730/user/login")
+            .post("http://localhost:8080/api/auth/login")
             .contentType(MediaType.APPLICATION_JSON)
             .body(loginForm)
 
-        val postResponseEntity = restTemplate.exchange(postRequest, AccountPublic::class.java)
+        val postResponseEntity = restTemplate.exchange(postRequest, String::class.java)
         println(postResponseEntity.body)
 
         val jSessionId = TestHelper().getJSessionId(postResponseEntity.headers)
 
         val getRequest = RequestEntity
-            .get("http://localhost:11730/test/hello")
+            .get("http://localhost:8080/test/hello")
             .header("Cookie", "JSESSIONID=$jSessionId")
             .build()
 
