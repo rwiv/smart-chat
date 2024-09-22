@@ -20,9 +20,9 @@ class InitRunnerDev(
     override fun run(args: ApplicationArguments?) {
         val ac1 = accountService.create(AccountAdd(
             role = AccountRole.MEMBER,
-            username = "ac1",
-            password = "ac1",
-            nickname = "ac1",
+            username = "user1@gmail.com",
+            password = "1234",
+            nickname = "user1",
         ))
 
         val cr1 = chatRoomService.create(ChatRoomAdd(
