@@ -20,6 +20,13 @@ class InitRunnerDev(
 ) : ApplicationRunner {
 
     override fun run(args: ApplicationArguments?) {
+        val admin = accountService.create(AccountAdd(
+            role = AccountRole.ADMIN,
+            username = "admin",
+            password = passwordEncoder.encode("admin"),
+            nickname = "admin",
+        ))
+
         val ac1 = accountService.create(AccountAdd(
             role = AccountRole.MEMBER,
             username = "user1@gmail.com",

@@ -6,6 +6,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
+import java.util.*
 
 @Entity
 class AccountEnt(
@@ -24,4 +25,6 @@ class AccountEnt(
 
     @Column
     val avatarUrl: String?,
-) : BaseTimeEntity()
+
+    id: UUID? = null,
+) : BaseTimeEntity(id)

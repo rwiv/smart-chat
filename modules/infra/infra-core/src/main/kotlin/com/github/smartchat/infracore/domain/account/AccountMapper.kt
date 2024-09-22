@@ -18,6 +18,17 @@ class AccountMapper {
         )
     }
 
+    fun dtoToEnt(dto: Account): AccountEnt {
+        return AccountEnt(
+            id = dto.id,
+            role = dto.role,
+            username = dto.username,
+            password = dto.password,
+            nickname = dto.nickname,
+            avatarUrl = dto.avatarUrl,
+        )
+    }
+
     fun addToEnt(req: AccountAdd): AccountEnt {
         return AccountEnt(
             role = req.role,

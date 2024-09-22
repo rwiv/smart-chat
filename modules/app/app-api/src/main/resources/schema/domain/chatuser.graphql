@@ -1,5 +1,5 @@
 type ChatUser {
-    id: Long!
+    id: UUID!
     chatRoom: ChatRoom!
     account: Account!
     createdAt: DateTime!

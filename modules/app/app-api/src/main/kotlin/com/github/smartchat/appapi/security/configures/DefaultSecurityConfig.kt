@@ -1,6 +1,7 @@
 package com.github.smartchat.appapi.security.configures
 
 import com.github.smartchat.appapi.security.filters.ApiLoginFilter
+import com.github.smartchat.appapi.security.filters.DevAuthFilter
 import com.github.smartchat.appapi.security.filters.ExceptionHandlerFilter
 import com.github.smartchat.appapi.security.handlers.DefaultAccessDeniedHandler
 import com.github.smartchat.appapi.security.handlers.DefaultAuthenticationEntryPoint
@@ -18,6 +19,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 @Configuration
 class DefaultSecurityConfig(
     private val loginFilter: ApiLoginFilter,
+    private val devAuthFilter: DevAuthFilter,
     private val exceptionHandlerFilter: ExceptionHandlerFilter,
     private val deniedHandler: DefaultAccessDeniedHandler,
     private val entryPoint: DefaultAuthenticationEntryPoint,
@@ -34,6 +36,7 @@ class DefaultSecurityConfig(
     )
     val ignoreList = listOf(
         "/avatars/**",
+//        "/h2-console/**",
     )
 
     private fun wrapMatcher(list: List<String>): Array<AntPathRequestMatcher> {
@@ -65,10 +68,11 @@ class DefaultSecurityConfig(
             .userDetailsService(accountDetailsService)
         }
 
-//        http.addFilterBefore(devAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
-//        http.addFilterBefore(loginFilter, DevAuthFilter::class.java)
+        http.addFilterBefore(devAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
+        http.addFilterBefore(loginFilter, DevAuthFilter::class.java)
 
-        http.addFilterBefore(loginFilter, UsernamePasswordAuthenticationFilter::class.java)
+//        http.addFilterBefore(loginFilter, UsernamePasswordAuthenticationFilter::class.java)
+
         http.addFilterBefore(exceptionHandlerFilter, ApiLoginFilter::class.java)
 
         http.exceptionHandling { conf -> conf
@@ -86,7 +90,6 @@ class DefaultSecurityConfig(
         return WebSecurityCustomizer { web: WebSecurity -> web
             .ignoring()
             .requestMatchers(*wrapMatcher(ignoreList))
-            .requestMatchers("/h2-console")
         }
     }
 }

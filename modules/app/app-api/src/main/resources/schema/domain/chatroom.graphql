@@ -1,5 +1,5 @@
 type ChatRoom {
-    id: Long!
+    id: UUID!
     createdBy: Account!
     title: String!
     createdAt: DateTime!
@@ -16,7 +16,7 @@ enum ChatRoomType {
     PRIVATE
 }
 
-input ChatRoomCreateRequest {
+input ChatRoomAdd {
     password: String
     title: String!
     type: ChatRoomType!

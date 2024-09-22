@@ -7,14 +7,16 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.context.annotation.Profile
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.stereotype.Component
 import org.springframework.web.filter.GenericFilterBean
 
-//@Profile("dev")
-//@Component
+@Profile("dev")
+@Component
 class DevAuthFilter(
     private val accountService: AccountService,
 ) : GenericFilterBean() {

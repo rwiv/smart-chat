@@ -13,8 +13,7 @@ class AccountServiceTest(
 ) {
 
     @Transactional
-    @Test
-    fun test() {
+    @Test fun test() {
         val ac1 = accountService.create(ac("a"))
         println(ac1)
     }

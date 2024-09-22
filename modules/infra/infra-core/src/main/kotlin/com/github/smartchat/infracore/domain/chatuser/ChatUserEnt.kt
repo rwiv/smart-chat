@@ -7,6 +7,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import java.util.*
 
 @Entity
 class ChatUserEnt(
@@ -18,4 +19,6 @@ class ChatUserEnt(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id")
     val chatRoom: ChatRoomEnt,
-) : BaseTimeEntity()
+
+    id: UUID? = null,
+) : BaseTimeEntity(id)

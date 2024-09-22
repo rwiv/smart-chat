@@ -9,6 +9,11 @@ import graphql.schema.idl.RuntimeWiring
 class GraphqlScalars {
 
     @DgsRuntimeWiring
+    fun addUUID(builder: RuntimeWiring.Builder): RuntimeWiring.Builder {
+        return builder.scalar(ExtendedScalars.UUID)
+    }
+
+    @DgsRuntimeWiring
     fun addLong(builder: RuntimeWiring.Builder): RuntimeWiring.Builder {
         return builder.scalar(ExtendedScalars.GraphQLLong)
     }

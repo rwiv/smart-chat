@@ -3,6 +3,7 @@ package com.github.smartchat.infracore.domain.chatroom
 import com.github.smartchat.infracore.common.BaseTimeEntity
 import com.github.smartchat.infracore.domain.account.AccountEnt
 import jakarta.persistence.*
+import java.util.*
 
 @Entity
 class ChatRoomEnt(
@@ -21,4 +22,6 @@ class ChatRoomEnt(
 
     @Column
     var userCnt: Int,
-) : BaseTimeEntity()
+
+    id: UUID? = null,
+) : BaseTimeEntity(id)
