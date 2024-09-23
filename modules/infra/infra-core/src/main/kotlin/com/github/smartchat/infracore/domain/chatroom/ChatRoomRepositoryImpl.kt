@@ -2,44 +2,43 @@ package com.github.smartchat.infracore.domain.chatroom
 
 import com.github.smartchat.commonutils.exceptions.HttpException
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoom
-import com.github.smartchat.domaincore.domain.chatroom.ChatRoomRepository
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomAdd
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomQuery
-import com.github.smartchat.domaincore.domain.chatuser.ChatUserAddInfra
-import com.github.smartchat.infracore.domain.chatuser.ChatUserJpaRepository
-import com.github.smartchat.infracore.domain.chatuser.ChatUserMapper
+import com.github.smartchat.domaincore.domain.chatroom.ChatRoomRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 @Repository
 class ChatRoomRepositoryImpl(
     private val chatRoomJpaRepository: ChatRoomJpaRepository,
-    private val chatUserJpaRepository: ChatUserJpaRepository,
     private val chatRoomMapper: ChatRoomMapper,
-    private val chatUserMapper: ChatUserMapper,
 ) : ChatRoomRepository {
 
     @Transactional
     override fun add(req: ChatRoomAdd, query: ChatRoomQuery): ChatRoom {
-        val chatRoomEnt = chatRoomJpaRepository.save(chatRoomMapper.addToEnt(req))
-
-        chatUserJpaRepository.save(chatUserMapper.addToEnt(ChatUserAddInfra(
-            accountId = req.createdById,
-            chatRoomId = chatRoomEnt.id!!,
-        )))
-        chatRoomEnt.userCnt += 1
-
-        return chatRoomJpaRepository.save(chatRoomEnt)
+        return chatRoomJpaRepository.save(chatRoomMapper.addToEnt(req))
             .let { chatRoomMapper.entToDto(it, query) }
     }
 
     @Transactional
     override fun delete(chatRoomId: UUID, query: ChatRoomQuery) {
         chatRoomJpaRepository.delete(ChatRoomEnt.onlyId(chatRoomId))
+    }
+
+    @Transactional
+    override fun updateUserCnt(chatRoomId: UUID, isPlus: Boolean, query: ChatRoomQuery) {
+        val chatRoomEnt = chatRoomJpaRepository.findById(chatRoomId).getOrNull()
+            ?: throw HttpException(404, "chatRoom not found")
+
+        if (isPlus) {
+            chatRoomEnt.userCnt += 1
+        } else {
+            chatRoomEnt.userCnt -= 1
+        }
+        chatRoomJpaRepository.save(chatRoomEnt)
     }
 
     override fun findAll(query: ChatRoomQuery): List<ChatRoom> {

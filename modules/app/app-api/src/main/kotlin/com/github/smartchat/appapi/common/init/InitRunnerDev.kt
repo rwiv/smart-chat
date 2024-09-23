@@ -5,6 +5,8 @@ import com.github.smartchat.domaincore.domain.account.AccountRole
 import com.github.smartchat.domaincore.domain.account.AccountService
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomAdd
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomService
+import com.github.smartchat.domaincore.domain.chatuser.ChatUserAddDomain
+import com.github.smartchat.domaincore.domain.chatuser.ChatUserQuery
 import com.github.smartchat.domaincore.domain.chatuser.ChatUserService
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
@@ -26,18 +28,34 @@ class InitRunnerDev(
             password = passwordEncoder.encode("admin"),
             nickname = "admin",
         ))
-
         val ac1 = accountService.create(AccountAdd(
             role = AccountRole.MEMBER,
             username = "user1@gmail.com",
             password = passwordEncoder.encode("1234"),
             nickname = "user1",
         ))
+        val ac2 = accountService.create(AccountAdd(
+            role = AccountRole.MEMBER,
+            username = "user2@gmail.com",
+            password = passwordEncoder.encode("1234"),
+            nickname = "user2",
+        ))
 
         val cr1 = chatRoomService.create(ChatRoomAdd(
-            title = "test1",
+            title = "test room 1",
             createdById = ac1.id,
             isPrivate = false,
         ))
+        val cr2 = chatRoomService.create(ChatRoomAdd(
+            title = "test room 2",
+            createdById = admin.id,
+            isPrivate = false,
+        ))
+
+        chatUserService.create(ChatUserAddDomain(
+            accountId = ac2.id,
+            chatRoomId = cr1.id,
+            password = null,
+        ), ChatUserQuery(false, null))
     }
 }

@@ -8,6 +8,7 @@ import com.github.smartchat.infracore.domain.account.AccountMapper
 import com.github.smartchat.infracore.domain.chatroom.ChatRoomEnt
 import com.github.smartchat.infracore.domain.chatroom.ChatRoomMapper
 import org.springframework.stereotype.Component
+import java.time.LocalDateTime
 
 @Component
 class ChatUserMapper(
@@ -34,9 +35,11 @@ class ChatUserMapper(
     }
 
     fun addToEnt(req: ChatUserAddInfra): ChatUserEnt {
-        return ChatUserEnt(
+        val ent = ChatUserEnt(
             account= AccountEnt.onlyId(req.accountId),
             chatRoom= ChatRoomEnt.onlyId(req.chatRoomId),
         )
+        ent.createdAt = LocalDateTime.now()
+        return ent
     }
 }

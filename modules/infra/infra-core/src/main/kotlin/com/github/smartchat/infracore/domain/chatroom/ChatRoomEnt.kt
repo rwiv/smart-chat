@@ -26,16 +26,16 @@ class ChatRoomEnt(
     id: UUID? = null,
 ) : BaseTimeEntity(id) {
 
-        companion object {
-            fun onlyId(id: UUID): ChatRoomEnt {
-                return ChatRoomEnt(
-                    id = id,
-                    title = "",
-                    createdBy = AccountEnt.onlyId(id),
-                    password = "",
-                    isPrivate = false,
-                    userCnt = 0,
-                )
-            }
+    companion object {
+        fun onlyId(id: UUID): ChatRoomEnt {
+            return ChatRoomEnt(
+                id = id,
+                title = "",
+                createdBy = AccountEnt.onlyId(id),
+                password = "",
+                isPrivate = false,
+                userCnt = 0,
+            )
         }
+    }
 }

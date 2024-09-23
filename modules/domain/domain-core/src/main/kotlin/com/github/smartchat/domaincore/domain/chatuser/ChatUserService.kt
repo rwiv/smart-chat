@@ -20,14 +20,22 @@ class ChatUserService(
     fun create(req: ChatUserAddDomain, query: ChatUserQuery): ChatUser {
         val chatRoom = chatRoomRepository.findById(req.chatRoomId, ChatRoomQuery(createdBy = false))
             ?: throw NotFoundException("ChatRoom not found")
+
+        // check if the ChatRoom is password protected
         if (chatRoom.password != req.password) {
             throw HttpException(403, "Password is incorrect")
         }
 
-        return chatUserRepository.add(ChatUserAddInfra(
+        // add ChatUser
+        val chatUser = chatUserRepository.add(ChatUserAddInfra(
             accountId = req.accountId,
             chatRoomId = req.chatRoomId,
         ), query)
+
+        // increase user count
+        chatRoomRepository.updateUserCnt(req.chatRoomId, true, ChatRoomQuery(createdBy = false))
+
+        return chatUser
     }
 
     @Transactional

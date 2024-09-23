@@ -2,6 +2,9 @@ package com.github.smartchat.domaincore.domain.chatroom
 
 import com.github.smartchat.commonutils.exceptions.HttpException
 import com.github.smartchat.commonutils.exceptions.NotFoundException
+import com.github.smartchat.domaincore.domain.chatuser.ChatUserAddInfra
+import com.github.smartchat.domaincore.domain.chatuser.ChatUserQuery
+import com.github.smartchat.domaincore.domain.chatuser.ChatUserRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.*
@@ -9,11 +12,24 @@ import java.util.*
 @Service
 class ChatRoomService(
     private val chatRoomRepository: ChatRoomRepository,
+    private val chatUserRepository: ChatUserRepository,
 ) {
 
     @Transactional
     fun create(req: ChatRoomAdd, query: ChatRoomQuery = ChatRoomQuery(createdBy = true)): ChatRoom {
-        return chatRoomRepository.add(req, query)
+        // create ChatRoom
+        val chatRoom = chatRoomRepository.add(req, query)
+
+        // add creator ChatUser to ChatRoom
+        chatUserRepository.add(ChatUserAddInfra(
+            accountId = req.createdById,
+            chatRoomId = chatRoom.id,
+        ), ChatUserQuery(false, null))
+
+        // increase user count
+        chatRoomRepository.updateUserCnt(chatRoom.id, true, ChatRoomQuery(createdBy = false))
+
+        return chatRoom
     }
 
     @Transactional
