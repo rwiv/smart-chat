@@ -3,14 +3,13 @@ package com.github.smartchat.infracore.domain.chatroom
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoom
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomAdd
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomQuery
-import com.github.smartchat.infracore.domain.account.AccountJpaRepository
+import com.github.smartchat.infracore.domain.account.AccountEnt
 import com.github.smartchat.infracore.domain.account.AccountMapper
 import org.springframework.stereotype.Component
-import kotlin.jvm.optionals.getOrNull
+import java.time.LocalDateTime
 
 @Component
 class ChatRoomMapper(
-    private val accountJpaRepository: AccountJpaRepository,
     private val accountMapper: AccountMapper,
 ) {
 
@@ -31,31 +30,15 @@ class ChatRoomMapper(
         )
     }
 
-    fun dtoToEnt(dto: ChatRoom, query: ChatRoomQuery): ChatRoomEnt {
-        val createdBy = if (query.createdBy) {
-            accountJpaRepository.findById(dto.createdById).getOrNull()
-                ?: throw NullPointerException("createdBy is null")
-        } else null
-
-        return ChatRoomEnt(
-            title = dto.title,
-            createdBy = createdBy ?: throw NullPointerException("createdById is null"),
-            password = dto.password,
-            isPrivate = dto.isPrivate,
-            userCnt = dto.userCnt,
-        )
-    }
-
     fun addToEnt(req: ChatRoomAdd): ChatRoomEnt {
-        val createdBy = accountJpaRepository.findById(req.createdById).getOrNull()
-            ?: throw NullPointerException("createdBy is null")
-
-        return ChatRoomEnt(
+        val ent = ChatRoomEnt(
             title = req.title,
-            createdBy = createdBy,
+            createdBy = AccountEnt.onlyId(req.createdById),
             password = req.password,
             isPrivate = req.isPrivate,
             userCnt = 0,
         )
+        ent.createdAt = LocalDateTime.now()
+        return ent
     }
 }

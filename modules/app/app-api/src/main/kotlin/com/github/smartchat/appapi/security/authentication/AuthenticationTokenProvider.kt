@@ -5,11 +5,11 @@ import com.github.smartchat.appapi.security.userdetails.AccountDetailsService
 import com.github.smartchat.commonutils.exceptions.HttpException
 import com.github.smartchat.commonutils.exceptions.NotFoundException
 import com.github.smartchat.domaincore.domain.account.AccountService
+import jakarta.transaction.Transactional
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
 @Component
 class AuthenticationTokenProvider(
@@ -30,6 +30,7 @@ class AuthenticationTokenProvider(
 
         val account = accountService.findById(accountDetails.id)?.toPublic()
             ?: throw NotFoundException("not found account")
+
         return AuthenticationToken.successToken(
             accountDetails.username,
             accountDetails.authorities,

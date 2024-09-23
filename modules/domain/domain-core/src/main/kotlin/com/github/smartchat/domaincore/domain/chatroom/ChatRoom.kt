@@ -10,7 +10,8 @@ data class ChatRoom(
     val createdById: UUID,
     val createdBy: AccountPublic?,
     val createdAt: LocalDateTime,
+    val userCnt: Int,
+
     val password: String?,
     val isPrivate: Boolean,
-    val userCnt: Int,
 )

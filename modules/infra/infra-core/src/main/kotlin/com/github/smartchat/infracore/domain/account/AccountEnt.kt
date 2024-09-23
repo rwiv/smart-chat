@@ -27,4 +27,18 @@ class AccountEnt(
     val avatarUrl: String?,
 
     id: UUID? = null,
-) : BaseTimeEntity(id)
+) : BaseTimeEntity(id) {
+
+    companion object {
+        fun onlyId(id: UUID): AccountEnt {
+            return AccountEnt(
+                id = id,
+                role = AccountRole.MEMBER,
+                username = "",
+                password = "",
+                nickname = "",
+                avatarUrl = "",
+            )
+        }
+    }
+}

@@ -1,13 +1,14 @@
 package com.github.smartchat.domaincore.domain.chatuser
 
 import com.github.smartchat.domaincore.domain.account.Account
-import com.github.smartchat.domaincore.domain.chatroom.ChatRoom
 import java.util.*
 
 interface ChatUserRepository {
+    fun add(req: ChatUserAddInfra, query: ChatUserQuery): ChatUser
+    fun delete(id: UUID, query: ChatUserQuery)
     fun findAll(query: ChatUserQuery): List<ChatUser>
+    fun findByPage(page: Int, size: Int, query: ChatUserQuery): List<ChatUser>
     fun findById(id: UUID, query: ChatUserQuery): ChatUser?
     fun findByAccount(account: Account, query: ChatUserQuery): List<ChatUser>
-    fun findByChatRoom(chatRoom: ChatRoom, query: ChatUserQuery): List<ChatUser>
-    fun add(req: ChatUserAdd, query: ChatUserQuery): ChatUser
+    fun findByChatRoom(chatRoomId: UUID, query: ChatUserQuery): List<ChatUser>
 }

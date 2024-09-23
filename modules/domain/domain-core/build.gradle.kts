@@ -3,5 +3,5 @@ val commonUtils: String by project
 dependencies {
     implementation(project(commonUtils))
 
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("jakarta.transaction:jakarta.transaction-api:2.0.1")
 }

@@ -21,4 +21,15 @@ class ChatUserEnt(
     val chatRoom: ChatRoomEnt,
 
     id: UUID? = null,
-) : BaseTimeEntity(id)
+) : BaseTimeEntity(id) {
+
+    companion object {
+        fun onlyId(id: UUID): ChatUserEnt {
+            return ChatUserEnt(
+                id = id,
+                account = AccountEnt.onlyId(id),
+                chatRoom = ChatRoomEnt.onlyId(id),
+            )
+        }
+    }
+}

@@ -1,5 +1,6 @@
 package com.github.smartchat.domaincore.domain.account
 
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -7,6 +8,8 @@ import java.util.*
 class AccountService(
     private val accountRepository: AccountRepository,
 ) {
+
+    @Transactional
     fun create(req: AccountAdd): Account {
         return accountRepository.add(req)
     }
