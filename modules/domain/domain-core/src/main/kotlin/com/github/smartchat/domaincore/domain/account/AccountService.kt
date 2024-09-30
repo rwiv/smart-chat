@@ -11,7 +11,16 @@ class AccountService(
 
     @Transactional
     fun create(req: AccountAdd): Account {
+        req.avatarUrl = "/avatars/${getRandInt()}.svg"
         return accountRepository.add(req)
+    }
+
+    private fun getRandInt(): Int {
+        val list = ArrayList<Int>()
+        for (i in 0..99) {
+            list.add(i)
+        }
+        return list.random()
     }
 
     fun findAll() : List<Account> {

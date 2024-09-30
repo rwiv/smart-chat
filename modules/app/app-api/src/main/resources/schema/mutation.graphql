@@ -5,6 +5,5 @@ type Mutation {
     deleteChatRoom(chatRoomId: UUID!): ChatRoom!
 
     createChatUser(chatRoomId: UUID!, password: String = null): ChatUser!
-    createChatUserFromParticipant(chatRoomId: UUID!, accountId: UUID!): ChatUser!
     deleteChatUserMe(chatRoomId: UUID!): ChatUser!
 }

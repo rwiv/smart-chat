@@ -6,6 +6,9 @@ import com.github.smartchat.domaincore.domain.chatroom.ChatRoom
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomAdd
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomQuery
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomService
+import com.github.smartchat.domaincore.domain.chatuser.ChatUser
+import com.github.smartchat.domaincore.domain.chatuser.ChatUserQuery
+import com.github.smartchat.domaincore.domain.chatuser.ChatUserService
 import com.netflix.graphql.dgs.*
 import org.springframework.security.core.Authentication
 import java.time.OffsetDateTime
@@ -15,6 +18,7 @@ import java.util.*
 @DgsComponent
 class ChatRoomDataFetcher(
     private val chatRoomService: ChatRoomService,
+    private val chatUserService: ChatUserService,
 ) {
 
     @DgsQuery
@@ -64,5 +68,17 @@ class ChatRoomDataFetcher(
     fun createdBy(dfe: DgsDataFetchingEnvironment): AccountPublic {
         val chatRoom = dfe.getSource<ChatRoom>() ?: throw NotFoundException("ChatRoom not found")
         return chatRoom.createdBy ?: throw NotFoundException("Account not found")
+    }
+
+    @DgsData(parentType = "ChatRoom")
+    fun chatUsers(dfe: DgsDataFetchingEnvironment): List<ChatUser> {
+        val chatRoom = dfe.getSource<ChatRoom>() ?: throw NotFoundException("ChatRoom not found")
+        return chatUserService.findByChatRoomId(chatRoom.id, ChatUserQuery(true, null))
+    }
+
+    // TODO: implement
+    @DgsData(parentType = "ChatRoom")
+    fun hasPassword(dfe: DgsDataFetchingEnvironment): Boolean {
+        return false
     }
 }

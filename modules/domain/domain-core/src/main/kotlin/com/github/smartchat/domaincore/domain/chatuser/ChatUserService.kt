@@ -57,6 +57,10 @@ class ChatUserService(
         return chatUserRepository.findByPage(page, size, query)
     }
 
+    fun findByChatRoomId(chatRoomId: UUID, query: ChatUserQuery): List<ChatUser> {
+        return chatUserRepository.findByChatRoom(chatRoomId, query)
+    }
+
     fun findByAccountId(accountId: UUID, query: ChatUserQuery): List<ChatUser> {
         val account = accountRepository.findById(accountId) ?: throw NotFoundException("Account not found")
         return chatUserRepository.findByAccount(account, query)

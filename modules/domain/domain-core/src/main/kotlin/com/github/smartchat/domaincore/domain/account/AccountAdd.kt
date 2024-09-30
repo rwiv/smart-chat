@@ -5,5 +5,5 @@ data class AccountAdd(
     val username: String,
     val password: String,
     val nickname: String,
-    val avatarUrl: String? = null,
+    var avatarUrl: String? = null,
 )

@@ -5,6 +5,7 @@ type ChatRoom {
     createdBy: Account!
     createdAt: DateTime!
     userCnt: Int!
+    hasPassword: Boolean!
 
     chatMessages: [ChatMessage!]
     chatUsers: [ChatUser!]
