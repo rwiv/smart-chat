@@ -53,6 +53,10 @@ class ChatUserService(
         return chatUserRepository.findAll(query)
     }
 
+    fun findById(id: UUID, query: ChatUserQuery): ChatUser? {
+        return chatUserRepository.findById(id, query)
+    }
+
     fun findByPage(page: Int, size: Int, query: ChatUserQuery): List<ChatUser> {
         return chatUserRepository.findByPage(page, size, query)
     }

@@ -24,6 +24,12 @@ class ChatUserDataFetcher(
         return chatUserService.findAll(query)
     }
 
+    @DgsQuery
+    fun chatUser(@InputArgument id: UUID): ChatUser? {
+        val query = ChatUserQuery(account = true, chatRoom = ChatRoomQuery(createdBy = false))
+        return chatUserService.findById(id, query)
+    }
+
     @DgsMutation
     fun createChatUser(
         @InputArgument chatRoomId: UUID,

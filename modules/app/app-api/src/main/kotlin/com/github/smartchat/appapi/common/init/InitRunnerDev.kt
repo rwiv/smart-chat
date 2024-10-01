@@ -40,6 +40,12 @@ class InitRunnerDev(
             password = passwordEncoder.encode("1234"),
             nickname = "user2",
         ))
+        val ac3 = accountService.create(AccountAdd(
+            role = AccountRole.MEMBER,
+            username = "user3@gmail.com",
+            password = passwordEncoder.encode("1234"),
+            nickname = "user3",
+        ))
 
         val cr1 = chatRoomService.create(ChatRoomAdd(
             title = "test room 1",
@@ -57,5 +63,10 @@ class InitRunnerDev(
             chatRoomId = cr1.id,
             password = null,
         ), ChatUserQuery(false, null))
+//        chatUserService.create(ChatUserAddDomain(
+//            accountId = ac3.id,
+//            chatRoomId = cr1.id,
+//            password = null,
+//        ), ChatUserQuery(false, null))
     }
 }

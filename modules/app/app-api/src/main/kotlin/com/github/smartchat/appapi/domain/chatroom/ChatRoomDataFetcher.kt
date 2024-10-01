@@ -63,12 +63,11 @@ class ChatRoomDataFetcher(
     @DgsMutation
     fun updateSharedChatUser(
         @InputArgument chatRoomId: UUID,
+        @InputArgument isClose: Boolean,
         authentication: Authentication,
     ): ChatRoom {
         val account = authentication.details as AccountPublic
-        val query = ChatRoomQuery(createdBy = true)
-
-        return chatRoomService.updateSharedChatUser(chatRoomId, account.id, query).also {
+        return chatRoomService.updateSharedChatUser(chatRoomId, account.id, isClose, ChatRoomQuery(createdBy = true)).also {
             template.convertAndSend("/sub/chat-rooms/${chatRoomId}/shared", it)
         }
     }
