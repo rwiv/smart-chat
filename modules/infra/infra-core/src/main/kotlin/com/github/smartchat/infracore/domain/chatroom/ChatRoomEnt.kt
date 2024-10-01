@@ -1,8 +1,10 @@
 package com.github.smartchat.infracore.domain.chatroom
 
-import com.github.smartchat.infracore.common.BaseTimeEntity
+import com.github.smartchat.infracore.common.BaseEntity
 import com.github.smartchat.infracore.domain.account.AccountEnt
+import com.github.smartchat.infracore.domain.chatuser.ChatUserEnt
 import jakarta.persistence.*
+import java.time.LocalDateTime
 import java.util.*
 
 @Entity
@@ -23,8 +25,15 @@ class ChatRoomEnt(
     @Column
     var userCnt: Int,
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shared_chat_user_id")
+    var sharedChatUser: ChatUserEnt? = null,
+
+    @Column
+    val createdAt: LocalDateTime,
+
     id: UUID? = null,
-) : BaseTimeEntity(id) {
+) : BaseEntity(id) {
 
     companion object {
         fun onlyId(id: UUID): ChatRoomEnt {
@@ -35,6 +44,7 @@ class ChatRoomEnt(
                 password = "",
                 isPrivate = false,
                 userCnt = 0,
+                createdAt = LocalDateTime.now(),
             )
         }
     }

@@ -23,10 +23,11 @@ class ChatRoomMapper(
             title = ent.title,
             createdById = ent.createdBy.id ?: throw NullPointerException("createdById is null"),
             createdBy = createdBy,
-            createdAt = ent.createdAt ?: throw NullPointerException("createdAt is null"),
+            createdAt = ent.createdAt,
             password = ent.password,
             isPrivate = ent.isPrivate,
             userCnt = ent.userCnt,
+            sharedChatUserId = ent.sharedChatUser?.id,
         )
     }
 
@@ -37,8 +38,8 @@ class ChatRoomMapper(
             password = req.password,
             isPrivate = req.isPrivate,
             userCnt = 0,
+            createdAt = LocalDateTime.now(),
         )
-        ent.createdAt = LocalDateTime.now()
         return ent
     }
 }

@@ -10,6 +10,7 @@ import com.github.smartchat.domaincore.domain.chatuser.ChatUser
 import com.github.smartchat.domaincore.domain.chatuser.ChatUserQuery
 import com.github.smartchat.domaincore.domain.chatuser.ChatUserService
 import com.netflix.graphql.dgs.*
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.security.core.Authentication
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -19,6 +20,7 @@ import java.util.*
 class ChatRoomDataFetcher(
     private val chatRoomService: ChatRoomService,
     private val chatUserService: ChatUserService,
+    private val template: SimpMessagingTemplate,
 ) {
 
     @DgsQuery
@@ -56,6 +58,20 @@ class ChatRoomDataFetcher(
         val account = authentication.details as AccountPublic
         val query = ChatRoomQuery(createdBy = true)
         return chatRoomService.delete(chatRoomId, account.id, query)
+    }
+
+    @DgsMutation
+    fun updateSharedChatUser(
+        @InputArgument chatRoomId: UUID,
+        @InputArgument sharedChatUserId: UUID,
+        authentication: Authentication,
+    ): ChatRoom {
+        val account = authentication.details as AccountPublic
+        val query = ChatRoomQuery(createdBy = true)
+
+        return chatRoomService.updateSharedChatUser(chatRoomId, sharedChatUserId, query).also {
+            template.convertAndSend("/sub/chat-rooms/${chatRoomId}/shared", it)
+        }
     }
 
     @DgsData(parentType = "ChatRoom")

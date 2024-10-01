@@ -6,6 +6,7 @@ type ChatRoom {
     createdAt: DateTime!
     userCnt: Int!
     hasPassword: Boolean!
+    sharedChatUserId: UUID
 
     chatMessages: [ChatMessage!]
     chatUsers: [ChatUser!]

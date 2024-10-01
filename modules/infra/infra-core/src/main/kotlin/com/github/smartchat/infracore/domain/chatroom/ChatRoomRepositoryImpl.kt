@@ -5,6 +5,7 @@ import com.github.smartchat.domaincore.domain.chatroom.ChatRoom
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomAdd
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomQuery
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomRepository
+import com.github.smartchat.infracore.domain.chatuser.ChatUserJpaRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -14,6 +15,7 @@ import kotlin.jvm.optionals.getOrNull
 @Repository
 class ChatRoomRepositoryImpl(
     private val chatRoomJpaRepository: ChatRoomJpaRepository,
+    private val chatUserJpaRepository: ChatUserJpaRepository,
     private val chatRoomMapper: ChatRoomMapper,
 ) : ChatRoomRepository {
 
@@ -39,6 +41,20 @@ class ChatRoomRepositoryImpl(
             chatRoomEnt.userCnt -= 1
         }
         chatRoomJpaRepository.save(chatRoomEnt)
+    }
+
+    @Transactional
+    override fun updateSharedChatUser(chatRoomId: UUID, sharedChatUserId: UUID?, query: ChatRoomQuery): ChatRoom {
+        val chatRoomEnt = chatRoomJpaRepository.findById(chatRoomId).getOrNull()
+            ?: throw HttpException(404, "chatRoom not found")
+
+        val chatUser = sharedChatUserId?.let {
+            chatUserJpaRepository.findById(it).getOrNull()
+        }
+        chatRoomEnt.sharedChatUser = chatUser
+        chatRoomJpaRepository.save(chatRoomEnt)
+
+        return chatRoomMapper.entToDto(chatRoomEnt, query)
     }
 
     override fun findAll(query: ChatRoomQuery): List<ChatRoom> {

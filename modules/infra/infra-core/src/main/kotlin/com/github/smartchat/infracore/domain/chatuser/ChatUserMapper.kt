@@ -38,8 +38,8 @@ class ChatUserMapper(
         val ent = ChatUserEnt(
             account= AccountEnt.onlyId(req.accountId),
             chatRoom= ChatRoomEnt.onlyId(req.chatRoomId),
+            createdAt = LocalDateTime.now(),
         )
-        ent.createdAt = LocalDateTime.now()
         return ent
     }
 }

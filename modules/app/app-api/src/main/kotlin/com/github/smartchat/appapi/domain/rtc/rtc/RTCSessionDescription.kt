@@ -1,4 +1,4 @@
-package com.github.smartchat.appapi.domain.webrtc
+package com.github.smartchat.appapi.domain.rtc.rtc
 
 data class RTCSessionDescription(
     val type: String,

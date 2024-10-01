@@ -42,6 +42,11 @@ class ChatRoomService(
         return chatRoom
     }
 
+    @Transactional
+    fun updateSharedChatUser(chatRoomId: UUID, sharedChatUserId: UUID?, query: ChatRoomQuery): ChatRoom {
+        return chatRoomRepository.updateSharedChatUser(chatRoomId, sharedChatUserId, query)
+    }
+
     fun findAll(query: ChatRoomQuery): List<ChatRoom> {
         return chatRoomRepository.findAll(query)
     }
