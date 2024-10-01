@@ -43,8 +43,11 @@ class ChatRoomService(
     }
 
     @Transactional
-    fun updateSharedChatUser(chatRoomId: UUID, sharedChatUserId: UUID?, query: ChatRoomQuery): ChatRoom {
-        return chatRoomRepository.updateSharedChatUser(chatRoomId, sharedChatUserId, query)
+    fun updateSharedChatUser(chatRoomId: UUID, requesterId: UUID?, query: ChatRoomQuery): ChatRoom {
+        val chatUser = chatUserRepository.findByChatRoom(chatRoomId, ChatUserQuery(true, null))
+            .find { it.accountId == requesterId }
+            ?: throw NotFoundException("chatUser not found")
+        return chatRoomRepository.updateSharedChatUser(chatRoomId, chatUser.id, query)
     }
 
     fun findAll(query: ChatRoomQuery): List<ChatRoom> {
