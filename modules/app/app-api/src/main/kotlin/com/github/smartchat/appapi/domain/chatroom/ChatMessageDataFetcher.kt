@@ -1,17 +1,18 @@
 package com.github.smartchat.appapi.domain.chatroom
 
+import com.github.smartchat.commonutils.exceptions.NotFoundException
 import com.github.smartchat.domaincore.domain.account.AccountPublic
 import com.github.smartchat.domaincore.domain.chatmessage.ChatMessage
 import com.github.smartchat.domaincore.domain.chatmessage.ChatMessageAdd
 import com.github.smartchat.domaincore.domain.chatmessage.ChatMessageQuery
 import com.github.smartchat.domaincore.domain.chatmessage.ChatMessageService
+import com.github.smartchat.domaincore.domain.chatroom.ChatRoom
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomQuery
-import com.netflix.graphql.dgs.DgsComponent
-import com.netflix.graphql.dgs.DgsMutation
-import com.netflix.graphql.dgs.DgsQuery
-import com.netflix.graphql.dgs.InputArgument
+import com.netflix.graphql.dgs.*
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.security.core.Authentication
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import java.util.*
 
 @DgsComponent
@@ -54,5 +55,23 @@ class ChatMessageDataFetcher(
         ), query).also {
             template.convertAndSend("/sub/chat-rooms/${it.chatRoomId}/messages", it)
         }
+    }
+
+    @DgsData(parentType = "ChatMessage")
+    fun createdBy(dfe: DgsDataFetchingEnvironment): AccountPublic {
+        val chatMessage = dfe.getSource<ChatMessage>() ?: throw NotFoundException("ChatRoom not found")
+        return chatMessage.createdBy ?: throw NotFoundException("Account not found")
+    }
+
+    @DgsData(parentType = "ChatMessage")
+    fun createdAt(dfe: DgsDataFetchingEnvironment): OffsetDateTime {
+        val chatMessage = dfe.getSource<ChatMessage>() ?: throw NotFoundException("Chatroom not found")
+        return chatMessage.createdAt.atOffset(ZoneOffset.UTC)
+    }
+
+    @DgsData(parentType = "ChatMessage")
+    fun chatRoom(dfe: DgsDataFetchingEnvironment): ChatRoom {
+        val chatMessage = dfe.getSource<ChatMessage>() ?: throw NotFoundException("ChatRoom not found")
+        return chatMessage.chatRoom ?: throw NotFoundException("ChatRoom not found")
     }
 }

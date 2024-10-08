@@ -3,6 +3,9 @@ package com.github.smartchat.appapi.common.init
 import com.github.smartchat.domaincore.domain.account.AccountAdd
 import com.github.smartchat.domaincore.domain.account.AccountRole
 import com.github.smartchat.domaincore.domain.account.AccountService
+import com.github.smartchat.domaincore.domain.chatmessage.ChatMessageAdd
+import com.github.smartchat.domaincore.domain.chatmessage.ChatMessageQuery
+import com.github.smartchat.domaincore.domain.chatmessage.ChatMessageService
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomAdd
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomService
 import com.github.smartchat.domaincore.domain.chatuser.ChatUserAddDomain
@@ -18,6 +21,7 @@ class InitRunnerDev(
     private val accountService: AccountService,
     private val chatRoomService: ChatRoomService,
     private val chatUserService: ChatUserService,
+    private val chatMessageService: ChatMessageService,
     private val passwordEncoder: PasswordEncoder,
 ) : ApplicationRunner {
 
@@ -68,5 +72,16 @@ class InitRunnerDev(
 //            chatRoomId = cr1.id,
 //            password = null,
 //        ), ChatUserQuery(false, null))
+
+        chatMessageService.create(ChatMessageAdd(
+            chatRoomId = cr1.id,
+            createdById = ac1.id,
+            content = "test message 1",
+        ), ChatMessageQuery(false, null))
+        chatMessageService.create(ChatMessageAdd(
+            chatRoomId = cr1.id,
+            createdById = ac1.id,
+            content = "test message 2",
+        ), ChatMessageQuery(false, null))
     }
 }
