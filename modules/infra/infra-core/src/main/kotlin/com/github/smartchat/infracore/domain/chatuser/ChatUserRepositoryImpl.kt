@@ -38,10 +38,9 @@ class ChatUserRepositoryImpl(
     }
 
     override fun findByPage(page: Int, size: Int, query: ChatUserQuery): List<ChatUser> {
-        if (page - 1 < 0) {
-            throw HttpException(400, "invalid page number")
-        }
-        return chatUserJpaRepository.findAll(PageRequest.of(page - 1, size)).content
+        if (page < 0) throw HttpException(400, "invalid page number")
+
+        return chatUserJpaRepository.findAll(PageRequest.of(page, size)).content
             .map { chatUserMapper.entToDto(it, query) }
     }
 

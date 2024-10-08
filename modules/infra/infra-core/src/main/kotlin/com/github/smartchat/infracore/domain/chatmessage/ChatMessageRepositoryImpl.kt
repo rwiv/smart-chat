@@ -33,9 +33,11 @@ class ChatMessageRepositoryImpl(
         val latest = chatMessageJpaRepository.findLatestOne(chatRoom)
         val num = if (latest == null) 0 else latest.num + 1
 
-        val chatMessage = chatMessageMapper.addToEnt(req, num)
-
-        return chatMessageJpaRepository.save(chatMessage).let { chatMessageMapper.entToDto(it, query) }
+        return chatMessageJpaRepository.save(
+            chatMessageMapper.addToEnt(req, chatRoom, createdBy, num)
+        ).let {
+            chatMessageMapper.entToDto(it, query)
+        }
     }
 
     override fun findById(id: UUID, query: ChatMessageQuery): ChatMessage? {
@@ -49,9 +51,9 @@ class ChatMessageRepositoryImpl(
     }
 
     override fun findByPage(page: Int, size: Int, query: ChatMessageQuery): List<ChatMessage> {
-        if (page-1 < 0) throw HttpException(400, "invalid page number")
+        if (page < 0) throw HttpException(400, "invalid page number")
 
-        return chatMessageJpaRepository.findAll(PageRequest.of(page-1, size)).content
+        return chatMessageJpaRepository.findAll(PageRequest.of(page, size)).content
             .map { chatMessageMapper.entToDto(it, query) }
     }
 

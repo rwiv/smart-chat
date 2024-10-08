@@ -36,10 +36,10 @@ class ChatMessageMapper(
         )
     }
 
-    fun addToEnt(req: ChatMessageAdd, num: Int): ChatMessageEnt {
+    fun addToEnt(req: ChatMessageAdd, chatRoom: ChatRoomEnt, createdBy: AccountEnt, num: Int): ChatMessageEnt {
         val ent = ChatMessageEnt(
-            chatRoom = ChatRoomEnt.onlyId(req.chatRoomId),
-            createdBy = AccountEnt.onlyId(req.createdById),
+            chatRoom = chatRoom,
+            createdBy = createdBy,
             content = req.content,
             num = num,
             createdAt = LocalDateTime.now(),

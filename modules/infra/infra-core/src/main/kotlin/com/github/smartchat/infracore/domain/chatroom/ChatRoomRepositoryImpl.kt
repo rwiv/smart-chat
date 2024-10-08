@@ -68,9 +68,9 @@ class ChatRoomRepositoryImpl(
     }
 
     override fun findByPage(page: Int, size: Int, query: ChatRoomQuery): List<ChatRoom> {
-        if (page-1 < 0) throw HttpException(400, "invalid page number")
+        if (page < 0) throw HttpException(400, "invalid page number")
 
-        return chatRoomJpaRepository.findAll(PageRequest.of(page - 1, size)).content
+        return chatRoomJpaRepository.findAll(PageRequest.of(page, size)).content
             .map { chatRoomMapper.entToDto(it, query) }
     }
 }
