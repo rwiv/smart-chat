@@ -11,6 +11,8 @@ import com.github.smartchat.domaincore.domain.chatuser.ChatUserQuery
 import com.github.smartchat.domaincore.domain.chatuser.ChatUserService
 import com.netflix.graphql.dgs.*
 import org.springframework.security.core.Authentication
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import java.util.*
 
 @DgsComponent
@@ -56,5 +58,11 @@ class AccountDataFetcher(
         val account = dfe.getSource<AccountPublic>() ?: throw NotFoundException("Account not found")
         val query = ChatUserQuery(account = true, chatRoom = ChatRoomQuery(createdBy = true))
         return chatUserService.findByAccountId(account.id, query).mapNotNull { it.chatRoom }
+    }
+
+    @DgsData(parentType = "Account")
+    fun createdAt(dfe: DgsDataFetchingEnvironment): OffsetDateTime {
+        val account = dfe.getSource<AccountPublic>() ?: throw NotFoundException("Account not found")
+        return account.createdAt.atOffset(ZoneOffset.UTC)
     }
 }

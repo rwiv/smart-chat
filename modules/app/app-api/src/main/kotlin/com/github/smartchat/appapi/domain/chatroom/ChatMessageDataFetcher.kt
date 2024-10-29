@@ -2,6 +2,7 @@ package com.github.smartchat.appapi.domain.chatroom
 
 import com.github.smartchat.commonutils.exceptions.NotFoundException
 import com.github.smartchat.domaincore.domain.account.AccountPublic
+import com.github.smartchat.domaincore.domain.account.AccountService
 import com.github.smartchat.domaincore.domain.chatmessage.ChatMessage
 import com.github.smartchat.domaincore.domain.chatmessage.ChatMessageAdd
 import com.github.smartchat.domaincore.domain.chatmessage.ChatMessageQuery
@@ -18,6 +19,7 @@ import java.util.*
 @DgsComponent
 class ChatMessageDataFetcher(
     private val chatMessageService: ChatMessageService,
+    private val accountService: AccountService,
     private val template: SimpMessagingTemplate,
 ) {
 
@@ -60,7 +62,12 @@ class ChatMessageDataFetcher(
     @DgsData(parentType = "ChatMessage")
     fun createdBy(dfe: DgsDataFetchingEnvironment): AccountPublic {
         val chatMessage = dfe.getSource<ChatMessage>() ?: throw NotFoundException("ChatRoom not found")
-        return chatMessage.createdBy ?: throw NotFoundException("Account not found")
+        return try {
+            chatMessage.createdBy ?: throw NotFoundException("Account not found")
+        } catch (e: Exception) {
+            accountService.findById(chatMessage.createdById)?.toPublic()
+                ?: throw NotFoundException("Account not found")
+        }
     }
 
     @DgsData(parentType = "ChatMessage")

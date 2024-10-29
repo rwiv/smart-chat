@@ -25,4 +25,8 @@ class ChatMessageService(
     fun findByPage(chatRoomId: UUID, page: Int, size: Int, offset: Int, query: ChatMessageQuery): List<ChatMessage> {
         return chatMessageRepository.findByDescOffset(chatRoomId, page, size, offset, query)
     }
+
+    fun findByChatRoomId(chatRoomId: UUID, query: ChatMessageQuery): List<ChatMessage> {
+        return chatMessageRepository.findByChatRoom(chatRoomId, query)
+    }
 }

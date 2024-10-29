@@ -3,6 +3,7 @@ package com.github.smartchat.infracore.domain.account
 import com.github.smartchat.domaincore.domain.account.Account
 import com.github.smartchat.domaincore.domain.account.AccountAdd
 import org.springframework.stereotype.Component
+import java.time.LocalDateTime
 
 @Component
 class AccountMapper {
@@ -15,6 +16,7 @@ class AccountMapper {
             password = ent.password,
             nickname = ent.nickname,
             avatarUrl = ent.avatarUrl,
+            createdAt = ent.createdAt,
         )
     }
 
@@ -26,6 +28,7 @@ class AccountMapper {
             password = dto.password,
             nickname = dto.nickname,
             avatarUrl = dto.avatarUrl,
+            createdAt = dto.createdAt,
         )
     }
 
@@ -36,6 +39,7 @@ class AccountMapper {
             password = req.password,
             nickname = req.nickname,
             avatarUrl = req.avatarUrl,
+            createdAt = LocalDateTime.now(),
         )
     }
 }

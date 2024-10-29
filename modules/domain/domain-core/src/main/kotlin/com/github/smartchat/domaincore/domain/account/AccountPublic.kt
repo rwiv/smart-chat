@@ -1,5 +1,6 @@
 package com.github.smartchat.domaincore.domain.account
 
+import java.time.LocalDateTime
 import java.util.*
 
 data class AccountPublic(
@@ -8,4 +9,5 @@ data class AccountPublic(
     val username: String,
     val nickname: String,
     val avatarUrl: String?,
+    val createdAt: LocalDateTime,
 )

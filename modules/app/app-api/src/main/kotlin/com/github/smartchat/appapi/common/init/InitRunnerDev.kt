@@ -1,11 +1,13 @@
 package com.github.smartchat.appapi.common.init
 
+import com.github.smartchat.domaincore.domain.account.Account
 import com.github.smartchat.domaincore.domain.account.AccountAdd
 import com.github.smartchat.domaincore.domain.account.AccountRole
 import com.github.smartchat.domaincore.domain.account.AccountService
 import com.github.smartchat.domaincore.domain.chatmessage.ChatMessageAdd
 import com.github.smartchat.domaincore.domain.chatmessage.ChatMessageQuery
 import com.github.smartchat.domaincore.domain.chatmessage.ChatMessageService
+import com.github.smartchat.domaincore.domain.chatroom.ChatRoom
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomAdd
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomService
 import com.github.smartchat.domaincore.domain.chatuser.ChatUserAddDomain
@@ -58,7 +60,12 @@ class InitRunnerDev(
         ))
         val cr2 = chatRoomService.create(ChatRoomAdd(
             title = "test room 2",
-            createdById = admin.id,
+            createdById = ac2.id,
+            isPrivate = false,
+        ))
+        val cr3 = chatRoomService.create(ChatRoomAdd(
+            title = "test room 3",
+            createdById = ac1.id,
             isPrivate = false,
         ))
 
@@ -73,15 +80,20 @@ class InitRunnerDev(
 //            password = null,
 //        ), ChatUserQuery(false, null))
 
+        sendMessage(cr1, ac1, "test message 1")
+        sendMessage(cr1, ac1, "test message 2")
+        sendMessage(cr1, ac2, "test message 3")
+        sendMessage(cr1, ac2, "test message 4")
+        sendMessage(cr1, ac1, "test message 5")
+        sendMessage(cr1, ac1, "test message 6")
+        sendMessage(cr1, ac1, "test message 7")
+    }
+
+    private fun sendMessage(chatRoom: ChatRoom, createdBy: Account, content: String) {
         chatMessageService.create(ChatMessageAdd(
-            chatRoomId = cr1.id,
-            createdById = ac1.id,
-            content = "test message 1",
-        ), ChatMessageQuery(false, null))
-        chatMessageService.create(ChatMessageAdd(
-            chatRoomId = cr1.id,
-            createdById = ac1.id,
-            content = "test message 2",
+            chatRoomId = chatRoom.id,
+            createdById = createdBy.id,
+            content = content,
         ), ChatMessageQuery(false, null))
     }
 }
