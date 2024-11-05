@@ -66,6 +66,8 @@ class ChatUserDataFetcher(
     fun chatMessages(dfe: DgsDataFetchingEnvironment): List<ChatMessage> {
         val chatUser = dfe.getSource<ChatUser>() ?: throw NotFoundException("ChatUser not found")
         val query = ChatMessageQuery(createdBy = false, chatRoom = null)
-        return chatMessageService.findAll(query).filter { it.createdById == chatUser.accountId }
+        return chatMessageService.findAll(query)
+            .filter { it.createdById == chatUser.accountId }
+            .filter { it.chatRoomId == chatUser.chatRoomId }
     }
 }

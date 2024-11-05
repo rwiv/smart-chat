@@ -21,13 +21,13 @@ class ChatRoomService(
         val chatRoom = chatRoomRepository.add(req, query)
 
         // add creator ChatUser to ChatRoom
-        chatUserRepository.add(ChatUserAddInfra(
-            accountId = req.createdById,
-            chatRoomId = chatRoom.id,
-        ), ChatUserQuery(false, null))
+//        chatUserRepository.add(ChatUserAddInfra(
+//            accountId = req.createdById,
+//            chatRoomId = chatRoom.id,
+//        ), ChatUserQuery(false, null))
 
         // increase user count
-        chatRoomRepository.updateUserCnt(chatRoom.id, true, ChatRoomQuery(createdBy = false))
+//        chatRoomRepository.updateUserCnt(chatRoom.id, true, ChatRoomQuery(createdBy = false))
 
         return chatRoom
     }

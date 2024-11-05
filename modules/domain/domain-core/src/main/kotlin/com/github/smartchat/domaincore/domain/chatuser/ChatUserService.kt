@@ -26,6 +26,12 @@ class ChatUserService(
             throw HttpException(403, "Password is incorrect")
         }
 
+        val chatUsers = chatUserRepository.findByChatRoom(chatRoom.id, query)
+        val searched = chatUsers.find { it.accountId == req.accountId }
+        if (searched != null) {
+            return searched
+        }
+
         // add ChatUser
         val chatUser = chatUserRepository.add(ChatUserAddInfra(
             accountId = req.accountId,
