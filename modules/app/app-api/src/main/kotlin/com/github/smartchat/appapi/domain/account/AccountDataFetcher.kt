@@ -6,11 +6,13 @@ import com.github.smartchat.domaincore.domain.account.AccountPublic
 import com.github.smartchat.domaincore.domain.account.AccountService
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoom
 import com.github.smartchat.domaincore.domain.chatroom.ChatRoomQuery
+import com.github.smartchat.domaincore.domain.chatroom.ChatRoomService
 import com.github.smartchat.domaincore.domain.chatuser.ChatUser
 import com.github.smartchat.domaincore.domain.chatuser.ChatUserQuery
 import com.github.smartchat.domaincore.domain.chatuser.ChatUserService
 import com.netflix.graphql.dgs.*
 import org.springframework.security.core.Authentication
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.util.*
@@ -19,6 +21,8 @@ import java.util.*
 class AccountDataFetcher(
     private val accountService: AccountService,
     private val chatUserService: ChatUserService,
+    private val chatRoomService: ChatRoomService,
+    private val passwordEncoder: PasswordEncoder,
 ) {
 
     @DgsQuery
@@ -43,6 +47,7 @@ class AccountDataFetcher(
 
     @DgsMutation
     fun createAccount(req: AccountAdd): AccountPublic {
+        req.password = passwordEncoder.encode(req.password)
         return accountService.create(req).toPublic()
     }
 
@@ -56,8 +61,8 @@ class AccountDataFetcher(
     @DgsData(parentType = "Account")
     fun chatRooms(dfe: DgsDataFetchingEnvironment): List<ChatRoom> {
         val account = dfe.getSource<AccountPublic>() ?: throw NotFoundException("Account not found")
-        val query = ChatUserQuery(account = true, chatRoom = ChatRoomQuery(createdBy = true))
-        return chatUserService.findByAccountId(account.id, query).mapNotNull { it.chatRoom }
+        val query = ChatRoomQuery(createdBy = true)
+        return chatRoomService.findAll(query).filter { it.createdById == account.id }
     }
 
     @DgsData(parentType = "Account")
