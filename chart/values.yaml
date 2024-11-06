@@ -1,0 +1,13 @@
+global:
+  name: smart-chat
+  namespace: stage
+
+image:
+  repository: ghcr.io/rwiv/smart-chat
+  tag: 0.1.0
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 80
+  nodePort: 31502
